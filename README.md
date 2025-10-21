@@ -1,63 +1,108 @@
-## Ceph Distributed Storage System Setup
+# Ceph Distributed Storage Cluster Deployer
 
-This script automates the installation and setup of the **Ceph Distributed Storage System** in your cluster. It configures the Ceph monitor, OSDs (Object Storage Daemons), MDS (Metadata Server), and RGW (Rados Gateway) on your specified cluster nodes. The script is designed to work with a specific setup and IP addresses, which you can customize based on your environment.
+**Repository Name:** `ceph.distributed.storage.cluster.deployer`
 
-### Prerequisites
+This automation tool deploys and configures a **Ceph distributed storage cluster** across multiple nodes. It handles installation and setup of all key components, including **Ceph Monitors (MONs)**, **OSDs (Object Storage Daemons)**, **MDS (Metadata Server)**, and **Rados Gateway (RGW)**.
 
-- Ubuntu or Debian-based system
-- Sudo privileges on all nodes in the cluster
-- Ceph repositories and packages installed
-- Network connectivity between the nodes in the cluster
+Even if you are not familiar with Ceph, this repository provides scripts to bring up a fully functional cluster using a simple configuration file with your node IPs.
 
-### Cluster Configuration
+---
 
-The script assumes the following host configuration:
-- **Admin Node**: `host-192-168-0-6`
-- **Ceph Monitor Node**: `host-192-168-0-20`
-- **Ceph OSD Nodes**: 
-  - `host-192-168-0-8`
-  - `host-192-168-0-19`
-  - `host-192-168-0-4`
+## What is Ceph?
 
-You can modify the `USERNAME`, `CLUSTER_NAME`, and other variables as needed.
+Ceph is an **open-source distributed storage system** that provides:
 
-### How to Use
+* **Object, block, and file storage** in a unified platform
+* **High availability and fault tolerance** through replication and CRUSH maps
+* **Scalable architecture** - add or remove nodes without downtime
+* **Self-healing and self-managing capabilities** to reduce operational overhead
 
-1. Clone or download the repository.
-2. Customize the script with your host details:
-   - Modify the hostnames for the monitor and OSD nodes.
-   - Set the network range and cluster name.
-3. Run the script:
-   ```bash
-   chmod +x ceph_setup.sh
-   ./ceph_setup.sh
-   ```
+Ceph allows you to turn a cluster of servers into a **highly reliable and elastic storage system**.
 
-### Script Steps
+---
 
-1. **Initial Setup**: 
-   - Downloads the Ceph repository keys.
-   - Installs `ceph-deploy` and removes any conflicting older versions.
-   
-2. **Cluster Purge (Optional)**: 
-   - Purges any previous Ceph deployments to avoid conflicts.
+## Prerequisites
 
-3. **Ceph Installation**:
-   - Installs the necessary Ceph components (`ceph-mon`, `ceph-osd`, `ceph-mgr`, etc.) on the specified nodes.
-   
-4. **Ceph Configuration**:
-   - Configures the public network and cluster settings.
-   - Creates and initializes the monitor.
-   
-5. **OSD Creation**:
-   - Configures and creates the OSDs on the specified nodes.
+Before running the scripts:
 
-6. **MDS and RGW**:
-   - Creates the Metadata Server and Rados Gateway.
+* Ubuntu or Debian-based operating system on all nodes
+* Sudo privileges on all nodes in the cluster
+* Network connectivity between all cluster nodes
+* Ceph repositories and packages installed (the script can handle installation if needed)
 
-7. **Monitor Addition**:
-   - Adds additional monitor nodes as needed.
+---
 
-8. **Health Check**:
-   - After installation, you can log into the monitor to check the health of the Ceph cluster.
+## Cluster Configuration
 
+The default configuration assumes the following node roles (modify as needed):
+
+* **Admin Node:** `host-192-168-0-6`
+* **Ceph Monitor Node:** `host-192-168-0-20`
+* **Ceph OSD Nodes:**
+
+  * `host-192-168-0-8`
+  * `host-192-168-0-19`
+  * `host-192-168-0-4`
+
+You can customize variables such as `USERNAME`, `CLUSTER_NAME`, and node IPs in the configuration file.
+
+---
+
+## How to Use
+
+1. Clone or download the repository:
+
+```bash
+git clone <repo_url>
+cd ceph.distributed.storage.cluster.deployer
+```
+
+2. Customize the configuration:
+
+* Edit hostnames and IP addresses for monitor and OSD nodes
+* Set the network range and cluster name
+
+3. Make the main script executable and run it:
+
+```bash
+chmod +x ceph_setup.sh
+./ceph_setup.sh
+```
+
+---
+
+## Script Steps
+
+1. **Initial Setup**
+
+   * Downloads Ceph repository keys
+   * Installs `ceph-deploy` and removes conflicting older versions
+
+2. **Cluster Purge (Optional)**
+
+   * Removes any previous Ceph deployments to avoid conflicts
+
+3. **Ceph Installation**
+
+   * Installs required components: `ceph-mon`, `ceph-osd`, `ceph-mgr`, etc.
+
+4. **Cluster Configuration**
+
+   * Configures public network and cluster settings
+   * Initializes the monitor node
+
+5. **OSD Creation**
+
+   * Sets up and deploys OSDs on specified nodes
+
+6. **MDS and RGW Setup**
+
+   * Deploys the Metadata Server and Rados Gateway
+
+7. **Additional Monitor Nodes**
+
+   * Adds extra monitor nodes to the cluster if needed
+
+8. **Health Check**
+
+   * Log in to the monitor node to check cluster health after deployment
